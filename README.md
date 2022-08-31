@@ -1,2 +1,2 @@
 # Glass_Lab_Tools
-some tools for Glass Lab bioinformatics analysis
+Some tools for Glass Lab bioinformatics analysis.
