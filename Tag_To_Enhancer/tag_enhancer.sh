@@ -13,7 +13,7 @@
 # Output: bed file
 #         fa file
 #         npy one hot file (npeak, peaksize(300), 4(ACGT)), sorted based on peakId in bed file.
-# usage:./tag_enhancer.sh "atac_tag*" "chip_tag*" my_project_name mm10, out_dir
+# usage:./tag_enhancer.sh "atac_tag*" "chip_tag*" my_project_name mm10 out_dir
 #
 # /home/zhl022/daima/to_share/Glass_Lab_Tools/Tag_To_Enhancer.sh "/home/zhl022/daima/projects/make_peaks_Aug30/il4/tags/atac/ctl/*"  "/home/zhl022/daima/projects/make_peaks_Aug30/il4/tags/chip/ctl/*" test1 mm10 ./myo
 # or 
