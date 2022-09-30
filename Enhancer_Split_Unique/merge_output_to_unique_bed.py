@@ -28,14 +28,17 @@ if __name__ == "__main__":
     bnameA=os.path.basename(bedA)
     bnameB=os.path.basename(bedB)
     
-    outnameA=bnameA.replace('active','active_unique')
-    outnameB=bnameB.replace('active','active_unique')
+    outnameA_unique=bnameA.replace('active','active_unique')
+    outnameB_unique=bnameB.replace('active','active_unique')
 
+    outnameA_common=bnameA.replace('active','active_common')
+    outnameB_common=bnameB.replace('active','active_common')
 
     in1bed=pd.read_csv(bedA,sep='\t',header=None)
     in2bed=pd.read_csv(bedB,sep='\t',header=None)
 
     merge_df=pd.read_csv(merge_file,sep='\t' )
+    merge_df_common=merge_df[(merge_df.iloc[:,-2].notnull()) & (merge_df.iloc[:,-1].notnull())]
     merge_df=merge_df[(merge_df.iloc[:,-2].isnull()) | (merge_df.iloc[:,-1].isnull())]
 
 
@@ -43,12 +46,22 @@ if __name__ == "__main__":
     uniqA_idx=[idx.split(',') for idx in merge_df.iloc[:,-2].dropna()]
     uniqA_idx=flatten(uniqA_idx)
     
+    commonA_idx=[idx.split(',') for idx in merge_df_common.iloc[:,-2].dropna()]
+    commonA_idx=flatten(commonA_idx)
+
+    
     # get unique index for peak file A
     uniqB_idx=[idx.split(',') for idx in merge_df.iloc[:,-1].dropna()]
     uniqB_idx=flatten(uniqB_idx)
     
-    in1bed[in1bed.iloc[:,3].isin(uniqA_idx)].to_csv(outdir+'/'+  outnameA,index=False,header=False,sep='\t')
-    in2bed[in2bed.iloc[:,3].isin(uniqB_idx)].to_csv(outdir+'/'+  outnameB,index=False,header=False,sep='\t')
+    commonB_idx=[idx.split(',') for idx in merge_df_common.iloc[:,-1].dropna()]
+    commonB_idx=flatten(commonB_idx)
+    
+    in1bed[in1bed.iloc[:,3].isin(uniqA_idx)].to_csv(outdir+'/'+  outnameA_unique,index=False,header=False,sep='\t')
+    in2bed[in2bed.iloc[:,3].isin(uniqB_idx)].to_csv(outdir+'/'+  outnameB_unique,index=False,header=False,sep='\t')
+    
+    in1bed[in1bed.iloc[:,3].isin(commonA_idx)].to_csv(outdir+'/'+  outnameA_common,index=False,header=False,sep='\t')
+    in2bed[in2bed.iloc[:,3].isin(commonB_idx)].to_csv(outdir+'/'+  outnameB_common,index=False,header=False,sep='\t')
     
     if output_full:
         in1bed.to_csv(outdir+'/'+bnameA,index=False,header=False,sep='\t')
