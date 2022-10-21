@@ -19,11 +19,18 @@ full_active_path_val=anno_path.replace("_anno.txt","_val_full_active_peak.txt") 
 enhancer_path_val=anno_path.replace("_anno.txt","_val_enhancer_active_peak.txt")
 promoter_active_path_val=anno_path.replace("_anno.txt","_val_promoter_active_peak.txt")
 
+## chr to keep
+chr_to_keep=['chr'+str(i) for i in range(1,23)]
+chr_to_keep.append('chrX')
+chr_to_keep.append('chrY')
+heldout=['chr1','chr8','chr18']
 #chip cutoff
 df=pd.read_csv(anno_path,sep='\t')
+df=df[df['Annotation'].notnull()]
+df=df[df['Chr'].isin(chr_to_keep)]
+
 df_sub=df[(df.iloc[:,-num_chip:].mean(axis=1))>chip_cutoff]
 
-heldout=['chr1','chr8','chr18']
 
 # resize
 df_sub_start = df_sub["Start"]
@@ -47,6 +54,7 @@ df_sub_promoter_train = df_sub_train[(df_sub_train['Annotation'].str.contains('p
 # val distal and promoter
 df_sub_distal_val = df_sub_val[(df_sub_val['Annotation'].str.contains('Intergenic') ) | (df_sub_val['Annotation'].str.contains('intron') )]
 df_sub_promoter_val = df_sub_val[(df_sub_val['Annotation'].str.contains('promoter') )  ]
+
 
 ## save csv
 #full
