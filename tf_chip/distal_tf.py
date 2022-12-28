@@ -3,9 +3,10 @@ import sys
 import pandas as pd
 
 anno_path=str(sys.argv[1])
-num_chip=int(sys.argv[2])  
+#num_chip=int(sys.argv[2])  
+#chip_cutoff=int(sys.argv[3]) # default 30
+scale_size=int(sys.argv[2]) # default 300
 chip_cutoff=int(sys.argv[3]) # default 30
-scale_size=int(sys.argv[4]) # default 300
 # set names 
 full_active_path=anno_path.replace("_anno.txt","_tv_full_active_peak.txt")  # tv stand for both train and validation
 enhancer_path=anno_path.replace("_anno.txt","_tv_enhancer_active_peak.txt")
@@ -29,11 +30,8 @@ df=pd.read_csv(anno_path,sep='\t')
 df=df[df['Annotation'].notnull()]
 df=df[df['Chr'].isin(chr_to_keep)]
 
-if num_chip >0:
-    df_sub=df[(df.iloc[:,-num_chip:].mean(axis=1))>chip_cutoff]
-else:
-    df_sub=df.copy()
-    print("not subseting tag counts")
+#df_sub=df[(df.iloc[:,-2:].mean(axis=1))>chip_cutoff]
+df_sub=df.copy()
 
 # resize
 df_sub_start = df_sub["Start"]
@@ -41,8 +39,6 @@ df_sub_end = df_sub["End"]
 mid = ((df_sub_start + df_sub_end)//2).astype(int)
 df_sub["Start"] = mid - scale_size//2
 df_sub["End"] = mid + scale_size//2
-df_sub=df_sub[df_sub["Start"]>1]
-
 
 # select train vs val
 df_sub_train = df_sub[~df_sub["Chr"].isin(heldout)]  # train df
