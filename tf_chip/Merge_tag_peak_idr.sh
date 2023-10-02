@@ -65,7 +65,8 @@ $python_path $enhancer_python $anno_outfile $out_size $chip_tag_min
 for peaks in $(ls -d ${out_wk_dir}/*active_peak.txt);do
     bname=$(basename $peaks .txt)
     ${homer_pre}/pos2bed.pl $peaks | awk '{OFS="\t"; NR>1; $2=$2+1; print}' > ${out_wk_dir}/${bname}.bed  # need add 1 to start in bed file
-    ${homer_pre}/homerTools extract ${out_wk_dir}/${bname}.bed ${genome_pre}/$genome -fa > ${out_wk_dir}/${bname}.fa
+    ${homer_pre}/bed2pos.pl ${out_wk_dir}/${bname}.bed > $peaks
+    ${homer_pre}/homerTools extract $peaks ${genome_pre}/$genome -fa > ${out_wk_dir}/${bname}.fa
     $python_path $one_hot_python ${out_wk_dir}/${bname}.fa $out_size
 done
 
