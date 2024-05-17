@@ -20,3 +20,5 @@ export ASPERA_SCP_PASS=********************
 ```bash
 /home/aspera/connect/bin/ascp -L /home/temp_log -i /home/aspera/connect/etc/aspera_tokenauth_id_rsa -Q -l 200m -k 1 /home/data/temp/ATAC_F002_HMG086_Microglia.fastq.gz asp-dbgap@gap-submit.ncbi.nlm.nih.gov:test
 ```
+OR
+Use the [batch_upload_in_docker.sh](https://github.com/rzzli/Glass_Lab_Tools/blob/main/dpGap_upload/batch_upload_in_docker.sh) to upload files in batch.
